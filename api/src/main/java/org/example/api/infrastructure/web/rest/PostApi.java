@@ -1,7 +1,7 @@
 package org.example.api.infrastructure.web.rest;
 
 import jakarta.validation.Valid;
-import org.example.api.infrastructure.web.rest.request.PostCreate;
+import org.example.common.post.request.PostCreate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

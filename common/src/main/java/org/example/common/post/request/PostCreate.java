@@ -1,4 +1,4 @@
-package org.example.api.infrastructure.web.rest.request;
+package org.example.common.post.request;
 
 import jakarta.validation.constraints.NotBlank;
 
