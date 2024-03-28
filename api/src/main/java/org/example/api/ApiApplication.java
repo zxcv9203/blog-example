@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
 		"org.example.api",
+		"org.example.common",
 		"org.example.core",
-		"org.example.common"
 })
 public class ApiApplication {
 
