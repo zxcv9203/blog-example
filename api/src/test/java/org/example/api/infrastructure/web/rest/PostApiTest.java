@@ -1,5 +1,8 @@
 package org.example.api.infrastructure.web.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.api.stub.PostStub;
+import org.example.common.post.request.PostCreate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,16 +27,21 @@ class PostApiTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Nested
     @DisplayName("게시글 생성")
     class Create {
         @Test
         @DisplayName("[성공] 게시글 생성 성공")
         void test1() throws Exception {
+            PostCreate request = PostStub.getPostCreate();
+
             mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"title\":\"123\",\"content\":\"내용\"}")
+                            .content(objectMapper.writeValueAsString(request))
                     )
                     .andExpect(status().isOk())
                     .andDo(print());
@@ -42,10 +50,12 @@ class PostApiTest {
         @Test
         @DisplayName("[실패] title 값은 필수값입니다.")
         void test2() throws Exception {
+            PostCreate request = PostStub.getNoTitlePostCreate();
+
             mockMvc.perform(MockMvcRequestBuilders.post("/posts")
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"title\":\"\",\"content\":\"내용\"}")
+                            .content(objectMapper.writeValueAsString(request))
                     )
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value() + ""))
