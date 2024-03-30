@@ -23,7 +23,11 @@ public class GlobalExceptionHandler {
         for (FieldError fieldError : e.getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        ErrorResponse<Map<String, String>> errorResponse = new ErrorResponse<>(HttpStatus.BAD_REQUEST.value() + "", "잘못된 요청입니다.", errors);
+        ErrorResponse<Map<String, String>> errorResponse = ErrorResponse.error(
+                HttpStatus.BAD_REQUEST,
+                "잘못된 요청입니다.",
+                errors
+        );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
