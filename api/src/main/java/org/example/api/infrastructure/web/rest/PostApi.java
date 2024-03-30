@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
 import org.example.core.application.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +23,8 @@ public class PostApi {
     }
 
     @PostMapping("/posts")
-    public String post(@RequestBody @Valid PostCreate request) {
+    public ResponseEntity<Void> post(@RequestBody @Valid PostCreate request) {
         postService.write(request);
-        return "게시글 작성 완료";
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
