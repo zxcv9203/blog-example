@@ -1,11 +1,10 @@
-package org.example.api.stub;
+package org.example.common.post.stub;
 
 import org.example.common.post.request.PostCreate;
-import org.example.core.domain.post.Post;
 
-public class PostStub {
+public class PostRequestStub {
 
-    private PostStub() {
+    private PostRequestStub() {
 
     }
 
