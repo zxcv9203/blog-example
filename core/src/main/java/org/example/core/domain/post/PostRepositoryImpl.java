@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.core.infrastructure.persistence.JpaPostRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,5 +30,10 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void deleteAll() {
         jpaPostRepository.deleteAll();
+    }
+
+    @Override
+    public List<Post> findAll() {
+        return jpaPostRepository.findAll();
     }
 }

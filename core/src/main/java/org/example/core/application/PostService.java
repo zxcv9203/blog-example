@@ -8,6 +8,8 @@ import org.example.core.domain.post.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -33,5 +35,17 @@ public class PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build();
+    }
+
+    public List<PostResponse> getList() {
+        return postRepository.findAll().stream()
+                .map(post ->
+                        PostResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .build()
+                )
+                .toList();
     }
 }

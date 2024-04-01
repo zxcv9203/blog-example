@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {PostService.class, PostRepositoryImpl.class})
@@ -62,6 +64,31 @@ class PostServiceTest {
             PostResponse got = postService.get(want.getId());
 
             assertThat(got.id()).isEqualTo(want.getId());
+        }
+    }
+
+    @Nested
+    @DisplayName("게시글 목록 조회")
+    class GetList {
+
+        @Test
+        @DisplayName("[성공] 게시글 목록 조회")
+        void getListTest() {
+            int want = 2;
+
+            Post post1 = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            Post post2 = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(post1);
+            postRepository.save(post2);
+
+            List<PostResponse> got = postService.getList();
+            assertThat(got).hasSize(want);
         }
     }
 }

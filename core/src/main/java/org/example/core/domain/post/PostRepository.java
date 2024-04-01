@@ -1,5 +1,6 @@
 package org.example.core.domain.post;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository {
@@ -10,4 +11,6 @@ public interface PostRepository {
     long count();
 
     void deleteAll();
+
+    List<Post> findAll();
 }

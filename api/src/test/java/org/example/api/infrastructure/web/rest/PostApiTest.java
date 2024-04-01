@@ -99,4 +99,26 @@ class PostApiTest {
         }
     }
 
+    @Nested
+    @DisplayName("게시글 목록 조회")
+    class GetList {
+        @Test
+        @DisplayName("[성공] 게시글 목록 조회 성공")
+        void getListTest() throws Exception {
+            Post post1 = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            Post post2 = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(post1);
+            postRepository.save(post2);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
+    }
 }

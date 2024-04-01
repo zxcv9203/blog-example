@@ -10,16 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class PostApi {
 
     private final PostService postService;
-
-    @GetMapping("/posts")
-    public String get() {
-        return "Hello World!";
-    }
 
     @PostMapping("/posts")
     public ResponseEntity<Void> post(@RequestBody @Valid PostCreate request) {
@@ -30,5 +27,11 @@ public class PostApi {
     @GetMapping("/posts/{id}")
     public ResponseEntity<PostResponse> get(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.get(id));
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostResponse>> getList() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getList());
     }
 }
