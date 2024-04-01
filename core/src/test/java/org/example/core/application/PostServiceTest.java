@@ -7,13 +7,18 @@ import org.example.core.common.JpaConfig;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
 import org.example.core.domain.post.PostRepositoryImpl;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,26 +73,22 @@ class PostServiceTest {
     }
 
     @Nested
-    @DisplayName("게시글 목록 조회")
+    @DisplayName("게시글 페이지 조회")
     class GetList {
 
         @Test
-        @DisplayName("[성공] 게시글 목록 조회")
+        @DisplayName("[성공] 게시글 페이지 조회")
         void getListTest() {
-            int want = 2;
+            int want = 5;
+            List<Post> requestPosts = IntStream.range(1, 31)
+                    .mapToObj(i -> Post.builder()
+                            .title("title" + i)
+                            .content("content" + i)
+                            .build())
+                    .toList();
+            postRepository.saveAll(requestPosts);
 
-            Post post1 = Post.builder()
-                    .title("title")
-                    .content("content")
-                    .build();
-            Post post2 = Post.builder()
-                    .title("title")
-                    .content("content")
-                    .build();
-            postRepository.save(post1);
-            postRepository.save(post2);
-
-            List<PostResponse> got = postService.getList();
+            List<PostResponse> got = postService.getList(Pageable.ofSize(want));
             assertThat(got).hasSize(want);
         }
     }

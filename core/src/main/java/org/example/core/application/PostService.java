@@ -5,6 +5,9 @@ import org.example.common.post.request.PostCreate;
 import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +40,8 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList() {
-        return postRepository.findAll().stream()
+    public List<PostResponse> getList(Pageable pageable) {
+        return postRepository.findAll(pageable).stream()
                 .map(post ->
                         PostResponse.builder()
                         .id(post.getId())

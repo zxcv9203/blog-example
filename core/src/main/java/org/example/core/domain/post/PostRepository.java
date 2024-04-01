@@ -1,5 +1,9 @@
 package org.example.core.domain.post;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,4 +17,8 @@ public interface PostRepository {
     void deleteAll();
 
     List<Post> findAll();
+
+    List<Post> saveAll(List<Post> requestPosts);
+
+    Page<Post> findAll(Pageable pageable);
 }

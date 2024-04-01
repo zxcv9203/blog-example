@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
 import org.example.common.post.response.PostResponse;
 import org.example.core.application.PostService;
-import org.example.core.domain.post.Post;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,9 @@ public class PostApi {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponse>> getList() {
+    public ResponseEntity<List<PostResponse>> getList(@PageableDefault Pageable pageable) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(postService.getList());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(postService.getList(pageable));
     }
 }

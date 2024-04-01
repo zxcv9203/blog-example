@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -105,19 +107,16 @@ class PostApiTest {
         @Test
         @DisplayName("[성공] 게시글 목록 조회 성공")
         void getListTest() throws Exception {
-            int want = 2;
-            Post post1 = Post.builder()
-                    .title("title")
-                    .content("content")
-                    .build();
-            Post post2 = Post.builder()
-                    .title("title")
-                    .content("content")
-                    .build();
-            postRepository.save(post1);
-            postRepository.save(post2);
+            int want = 10;
+            List<Post> requestPosts = IntStream.range(1, 31)
+                    .mapToObj(i -> Post.builder()
+                            .title("title" + i)
+                            .content("content" + i)
+                            .build())
+                    .toList();
+            postRepository.saveAll(requestPosts);
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
+            mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=0"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.length()").value(want))
                     .andDo(print());

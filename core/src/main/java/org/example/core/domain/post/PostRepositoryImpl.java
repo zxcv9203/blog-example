@@ -2,6 +2,8 @@ package org.example.core.domain.post;
 
 import lombok.RequiredArgsConstructor;
 import org.example.core.infrastructure.persistence.JpaPostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,5 +37,15 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> findAll() {
         return jpaPostRepository.findAll();
+    }
+
+    @Override
+    public List<Post> saveAll(List<Post> requestPosts) {
+        return jpaPostRepository.saveAll(requestPosts);
+    }
+
+    @Override
+    public Page<Post> findAll(Pageable pageable) {
+        return jpaPostRepository.findAll(pageable);
     }
 }
