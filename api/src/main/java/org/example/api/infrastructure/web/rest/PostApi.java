@@ -3,6 +3,7 @@ package org.example.api.infrastructure.web.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.response.PostResponse;
 import org.example.core.application.PostService;
 import org.example.core.domain.post.Post;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class PostApi {
     }
 
     @GetMapping("/posts/{id}")
-    public ResponseEntity<Post> get(@PathVariable Long id) {
+    public ResponseEntity<PostResponse> get(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(postService.get(id));
     }
 }

@@ -2,6 +2,7 @@ package org.example.core.application;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,14 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public Post get(Long id) {
-        return postRepository.findById(id)
+    public PostResponse get(Long id) {
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
     }
 }

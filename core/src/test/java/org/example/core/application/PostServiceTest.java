@@ -1,6 +1,7 @@
 package org.example.core.application;
 
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.response.PostResponse;
 import org.example.common.post.stub.PostRequestStub;
 import org.example.core.common.JpaConfig;
 import org.example.core.domain.post.Post;
@@ -58,9 +59,9 @@ class PostServiceTest {
                     .build();
             postRepository.save(want);
 
-            Post got = postService.get(want.getId());
+            PostResponse got = postService.get(want.getId());
 
-            assertThat(got.getId()).isEqualTo(want.getId());
+            assertThat(got.id()).isEqualTo(want.getId());
         }
     }
 }
