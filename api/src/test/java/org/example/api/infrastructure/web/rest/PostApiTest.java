@@ -3,6 +3,9 @@ package org.example.api.infrastructure.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.common.post.request.PostCreate;
 import org.example.common.post.stub.PostRequestStub;
+import org.example.core.domain.post.Post;
+import org.example.core.domain.post.PostRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,6 +33,13 @@ class PostApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @AfterEach
+    void tearDown() {
+        postRepository.deleteAll();
+    }
     @Nested
     @DisplayName("게시글 생성")
     class Create {
@@ -65,5 +75,28 @@ class PostApiTest {
         }
     }
 
+    @Nested
+    @DisplayName("게시글 단건 조회")
+    class Get {
+
+        private final String path = "/posts/{id}";
+
+        @Test
+        @DisplayName("[성공] 게시글 단건 조회 성공")
+        void getTest() throws Exception {
+            Post post = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(post);
+
+            mockMvc.perform(MockMvcRequestBuilders.get(path, post.getId()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(post.getId() + ""))
+                    .andExpect(jsonPath("$.title").value(post.getTitle()))
+                    .andExpect(jsonPath("$.content").value(post.getContent()))
+                    .andDo(print());
+        }
+    }
 
 }
