@@ -22,6 +22,11 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public long count() {
+        return jpaPostRepository.count();
+    }
+
+    @Override
     public void deleteAll() {
         jpaPostRepository.deleteAll();
     }
