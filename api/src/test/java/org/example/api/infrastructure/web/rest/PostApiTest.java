@@ -105,6 +105,7 @@ class PostApiTest {
         @Test
         @DisplayName("[성공] 게시글 목록 조회 성공")
         void getListTest() throws Exception {
+            int want = 2;
             Post post1 = Post.builder()
                     .title("title")
                     .content("content")
@@ -118,6 +119,7 @@ class PostApiTest {
 
             mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
                     .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()").value(want))
                     .andDo(print());
         }
     }
