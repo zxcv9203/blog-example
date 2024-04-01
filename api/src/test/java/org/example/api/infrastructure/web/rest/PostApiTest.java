@@ -107,7 +107,7 @@ class PostApiTest {
         @Test
         @DisplayName("[성공] 게시글 목록 조회 성공")
         void getListTest() throws Exception {
-            int want = 10;
+            int want = 5;
             List<Post> requestPosts = IntStream.range(1, 31)
                     .mapToObj(i -> Post.builder()
                             .title("title" + i)

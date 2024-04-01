@@ -3,3 +3,4 @@ spring:
     web:
       pageable:
         one-indexed-parameters: true # 페이지 조회시 1부터 시작
+        default-page-size: 5

@@ -31,7 +31,7 @@ public class PostApi {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponse>> getList(@PageableDefault Pageable pageable) {
+    public ResponseEntity<List<PostResponse>> getList(Pageable pageable) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(postService.getList(pageable));
