@@ -22,4 +22,9 @@ public class PostService {
 
         postRepository.save(post);
     }
+
+    public Post get(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+    }
 }

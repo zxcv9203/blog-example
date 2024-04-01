@@ -4,12 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
 import org.example.core.application.PostService;
+import org.example.core.domain.post.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +24,10 @@ public class PostApi {
     public ResponseEntity<Void> post(@RequestBody @Valid PostCreate request) {
         postService.write(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<Post> get(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(postService.get(id));
     }
 }
