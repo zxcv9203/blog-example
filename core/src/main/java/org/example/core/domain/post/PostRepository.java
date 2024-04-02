@@ -1,5 +1,6 @@
 package org.example.core.domain.post;
 
+import org.example.common.post.request.PostSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,5 +21,5 @@ public interface PostRepository {
 
     List<Post> saveAll(List<Post> requestPosts);
 
-    Page<Post> findAll(Pageable pageable);
+    List<Post> findAll(PostSearch pageable);
 }

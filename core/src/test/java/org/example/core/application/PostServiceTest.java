@@ -1,12 +1,15 @@
 package org.example.core.application;
 
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.common.post.stub.PostRequestStub;
 import org.example.core.common.JpaConfig;
+import org.example.core.common.QueryDslConfig;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
 import org.example.core.domain.post.PostRepositoryImpl;
+import org.example.core.infrastructure.persistence.QueryDslPostRepositoryImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,16 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = {PostService.class, PostRepositoryImpl.class})
+@SpringBootTest(classes = {PostService.class, PostRepositoryImpl.class, QueryDslPostRepositoryImpl.class})
 @EnableAutoConfiguration
-@Import(JpaConfig.class)
+@Import({JpaConfig.class, QueryDslConfig.class})
 class PostServiceTest {
 
     @Autowired
@@ -79,7 +81,11 @@ class PostServiceTest {
         @Test
         @DisplayName("[성공] 게시글 페이지 조회")
         void getListTest() {
-            int want = 5;
+            int want = 10;
+            PostSearch postSearch = PostSearch.builder()
+                    .page(1)
+                    .build();
+
             List<Post> requestPosts = IntStream.range(1, 31)
                     .mapToObj(i -> Post.builder()
                             .title("title" + i)
@@ -88,7 +94,7 @@ class PostServiceTest {
                     .toList();
             postRepository.saveAll(requestPosts);
 
-            List<PostResponse> got = postService.getList(Pageable.ofSize(want));
+            List<PostResponse> got = postService.getList(postSearch);
             assertThat(got).hasSize(want);
         }
     }

@@ -2,6 +2,7 @@ package org.example.core.application;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
@@ -40,8 +41,8 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(Pageable pageable) {
-        return postRepository.findAll(pageable).stream()
+    public List<PostResponse> getList(PostSearch request) {
+        return postRepository.findAll(request).stream()
                 .map(post ->
                         PostResponse.builder()
                         .id(post.getId())

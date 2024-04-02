@@ -1,8 +1,8 @@
 package org.example.core.domain.post;
 
 import lombok.RequiredArgsConstructor;
+import org.example.common.post.request.PostSearch;
 import org.example.core.infrastructure.persistence.JpaPostRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -45,7 +45,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Page<Post> findAll(Pageable pageable) {
-        return jpaPostRepository.findAll(pageable);
+    public List<Post> findAll(PostSearch postSearch) {
+        return jpaPostRepository.getList(postSearch);
     }
 }

@@ -107,7 +107,25 @@ class PostApiTest {
         @Test
         @DisplayName("[성공] 게시글 목록 조회 성공")
         void getListTest() throws Exception {
-            int want = 5;
+            int want = 10;
+            List<Post> requestPosts = IntStream.range(1, 31)
+                    .mapToObj(i -> Post.builder()
+                            .title("title" + i)
+                            .content("content" + i)
+                            .build())
+                    .toList();
+            postRepository.saveAll(requestPosts);
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=1"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()").value(want))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("[성공] 페이지를 0으로 요청하면 첫 페이지를 가져올 수 있다.")
+        void getPageZeroTest() throws Exception {
+            int want = 10;
             List<Post> requestPosts = IntStream.range(1, 31)
                     .mapToObj(i -> Post.builder()
                             .title("title" + i)
