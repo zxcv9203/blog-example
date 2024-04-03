@@ -9,7 +9,7 @@ import org.example.core.common.JpaConfig;
 import org.example.core.common.QueryDslConfig;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
-import org.example.core.domain.post.PostRepositoryImpl;
+import org.example.core.infrastructure.persistence.PostRepositoryImpl;
 import org.example.core.infrastructure.persistence.QueryDslPostRepositoryImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

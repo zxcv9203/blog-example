@@ -22,8 +22,14 @@ public class Post {
     @Lob
     private String content;
 
-    public void change(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public PostEditor.PostEditorBuilder toEditor() {
+        return PostEditor.builder()
+                .title(title)
+                .content(content);
+    }
+
+    public void edit(PostEditor postEditor) {
+        this.title = postEditor.getTitle();
+        this.content = postEditor.getContent();
     }
 }

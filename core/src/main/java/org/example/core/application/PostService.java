@@ -6,6 +6,7 @@ import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
+import org.example.core.domain.post.PostEditor;
 import org.example.core.domain.post.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,10 +44,10 @@ public class PostService {
         return postRepository.findAll(request).stream()
                 .map(post ->
                         PostResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .content(post.getContent())
-                        .build()
+                                .id(post.getId())
+                                .title(post.getTitle())
+                                .content(post.getContent())
+                                .build()
                 )
                 .toList();
     }
@@ -55,6 +56,12 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        post.change(request.title(), request.content());
+        PostEditor.PostEditorBuilder editor = post.toEditor();
+        PostEditor postEditor = editor
+                .title(request.title())
+                .content(request.content())
+                .build();
+
+        post.edit(postEditor);
     }
 }
