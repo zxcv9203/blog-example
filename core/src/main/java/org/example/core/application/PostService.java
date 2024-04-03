@@ -2,13 +2,11 @@ package org.example.core.application;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +49,12 @@ public class PostService {
                         .build()
                 )
                 .toList();
+    }
+
+    public void edit(Long id, PostEdit request) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        post.change(request.title(), request.content());
     }
 }

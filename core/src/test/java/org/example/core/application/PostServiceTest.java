@@ -1,6 +1,7 @@
 package org.example.core.application;
 
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.common.post.stub.PostRequestStub;
@@ -96,6 +97,34 @@ class PostServiceTest {
 
             List<PostResponse> got = postService.getList(postSearch);
             assertThat(got).hasSize(want);
+        }
+    }
+
+    @Nested
+    @DisplayName("게시글 수정")
+    class Edit {
+
+        @Test
+        @DisplayName("[성공] 게시글 수정 성공")
+        void editTest() {
+            Post want = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(want);
+
+            PostEdit request = PostEdit.builder()
+                    .title("title2")
+                    .content("content2")
+                    .build();
+
+            postService.edit(want.getId(), request);
+
+            Post got = postRepository.findById(want.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+            assertThat(got.getTitle()).isEqualTo(request.title());
+            assertThat(got.getContent()).isEqualTo(request.content());
         }
     }
 }

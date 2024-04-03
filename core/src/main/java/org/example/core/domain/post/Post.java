@@ -21,4 +21,9 @@ public class Post {
     @Column(name = "content", nullable = false)
     @Lob
     private String content;
+
+    public void change(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
