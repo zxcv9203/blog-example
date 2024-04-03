@@ -140,4 +140,28 @@ class PostApiTest {
                     .andDo(print());
         }
     }
+
+    @Nested
+    @DisplayName("게시글 수정")
+    class Edit {
+        @Test
+        @DisplayName("[성공] 게시글 수정 성공")
+        void editTest() throws Exception {
+            Post post = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(post);
+
+            PostCreate request = PostRequestStub.getPostCreate();
+
+            mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{id}", post.getId())
+                            .characterEncoding(StandardCharsets.UTF_8)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                    )
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
+    }
 }

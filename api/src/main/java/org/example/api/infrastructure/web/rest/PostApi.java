@@ -3,10 +3,10 @@ package org.example.api.infrastructure.web.rest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;
+import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.core.application.PostService;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +35,14 @@ public class PostApi {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(postService.getList(request));
+    }
+
+    @PatchMapping("/posts/{id}")
+    public ResponseEntity<Void> edit(
+            @PathVariable Long id,
+            @RequestBody @Valid PostEdit request
+    ) {
+        postService.edit(id, request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
