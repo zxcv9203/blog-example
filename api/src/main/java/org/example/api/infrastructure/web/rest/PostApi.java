@@ -45,4 +45,12 @@ public class PostApi {
         postService.edit(id, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    ) {
+        postService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

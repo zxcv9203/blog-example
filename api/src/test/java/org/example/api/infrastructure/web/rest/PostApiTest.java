@@ -164,4 +164,22 @@ class PostApiTest {
                     .andDo(print());
         }
     }
+
+    @Nested
+    @DisplayName("게시글 삭제")
+    class Delete {
+        @Test
+        @DisplayName("[성공] 게시글 삭제 성공")
+        void deleteTest() throws Exception {
+            Post post = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(post);
+
+            mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{id}", post.getId()))
+                    .andExpect(status().isOk())
+                    .andDo(print());
+        }
+    }
 }

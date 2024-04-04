@@ -50,4 +50,9 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> findAll(PostSearch postSearch) {
         return jpaPostRepository.getList(postSearch);
     }
+
+    @Override
+    public void delete(Post post) {
+        jpaPostRepository.delete(post);
+    }
 }

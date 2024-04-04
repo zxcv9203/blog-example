@@ -127,4 +127,23 @@ class PostServiceTest {
             assertThat(got.getContent()).isEqualTo(request.content());
         }
     }
+
+    @Nested
+    @DisplayName("게시글 삭제")
+    class Delete {
+
+        @Test
+        @DisplayName("[성공] 게시글 삭제 성공")
+        void deleteTest() {
+            Post want = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(want);
+
+            postService.delete(want.getId());
+
+            assertThat(postRepository.count()).isZero();
+        }
+    }
 }
