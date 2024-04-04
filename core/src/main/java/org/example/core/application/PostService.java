@@ -8,6 +8,7 @@ import org.example.common.post.response.PostResponse;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostEditor;
 import org.example.core.domain.post.PostRepository;
+import org.example.core.domain.post.exception.PostNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(PostNotFoundException::new);
 
         return PostResponse.builder()
                 .id(post.getId())
@@ -54,7 +55,7 @@ public class PostService {
 
     public void edit(Long id, PostEdit request) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(PostNotFoundException::new);
 
         PostEditor.PostEditorBuilder editor = post.toEditor();
         PostEditor postEditor = editor
@@ -67,7 +68,7 @@ public class PostService {
 
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(PostNotFoundException::new);
 
         postRepository.delete(post);
 

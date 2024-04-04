@@ -9,6 +9,7 @@ import org.example.core.common.JpaConfig;
 import org.example.core.common.QueryDslConfig;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
+import org.example.core.domain.post.exception.PostNotFoundException;
 import org.example.core.infrastructure.persistence.PostRepositoryImpl;
 import org.example.core.infrastructure.persistence.QueryDslPostRepositoryImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 @SpringBootTest(classes = {PostService.class, PostRepositoryImpl.class, QueryDslPostRepositoryImpl.class})
 @EnableAutoConfiguration
@@ -72,6 +74,20 @@ class PostServiceTest {
             PostResponse got = postService.get(want.getId());
 
             assertThat(got.id()).isEqualTo(want.getId());
+        }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 조회")
+        void notFoundTest() {
+            Post want = Post.builder()
+                    .title("title")
+                    .content("content")
+                    .build();
+            postRepository.save(want);
+
+            assertThatCode(() -> postService.get(0L))
+                    .isInstanceOf(PostNotFoundException.class)
+                    .hasMessage("게시글을 찾을 수 없습니다.");
         }
     }
 
@@ -126,6 +142,19 @@ class PostServiceTest {
             assertThat(got.getTitle()).isEqualTo(request.title());
             assertThat(got.getContent()).isEqualTo(request.content());
         }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 수정")
+        void notFoundTest() {
+            PostEdit request = PostEdit.builder()
+                    .title("title2")
+                    .content("content2")
+                    .build();
+
+            assertThatCode(() -> postService.edit(0L, request))
+                    .isInstanceOf(PostNotFoundException.class)
+                    .hasMessage("게시글을 찾을 수 없습니다.");
+        }
     }
 
     @Nested
@@ -144,6 +173,14 @@ class PostServiceTest {
             postService.delete(want.getId());
 
             assertThat(postRepository.count()).isZero();
+        }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 삭제")
+        void notFoundTest() {
+            assertThatCode(() -> postService.delete(0L))
+                    .isInstanceOf(PostNotFoundException.class)
+                    .hasMessage("게시글을 찾을 수 없습니다.");
         }
     }
 }
