@@ -99,6 +99,16 @@ class PostApiTest {
                     .andExpect(jsonPath("$.content").value(post.getContent()))
                     .andDo(print());
         }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 조회")
+        void notFoundTest() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders.get(path, 0))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
+                    .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
+                    .andDo(print());
+        }
     }
 
     @Nested
@@ -163,6 +173,22 @@ class PostApiTest {
                     .andExpect(status().isOk())
                     .andDo(print());
         }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 수정시 실패합니다.")
+        void notFoundTest() throws Exception {
+            PostCreate request = PostRequestStub.getPostCreate();
+
+            mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{id}", 0)
+                            .characterEncoding(StandardCharsets.UTF_8)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+                    )
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
+                    .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
+                    .andDo(print());
+        }
     }
 
     @Nested
@@ -179,6 +205,16 @@ class PostApiTest {
 
             mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{id}", post.getId()))
                     .andExpect(status().isOk())
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("[실패] 존재하지 않는 게시글 삭제")
+        void notFoundTest() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{id}", 0))
+                    .andExpect(status().isNotFound())
+                    .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
+                    .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
                     .andDo(print());
         }
     }
