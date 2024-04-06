@@ -1,4 +1,4 @@
-package org.example.core.common;
+package org.example.core.common.config;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;

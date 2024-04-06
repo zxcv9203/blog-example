@@ -1,4 +1,4 @@
-package org.example.core.common;
+package org.example.core.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
