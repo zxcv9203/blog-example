@@ -12,7 +12,7 @@ public record ErrorResponse<T>(
         return new ErrorResponse<>(String.valueOf(status.value()), message, data);
     }
 
-    public static <T> ErrorResponse<T> error(HttpStatus status, String message) {
-        return new ErrorResponse<>(String.valueOf(status.value()), message, null);
+    public static <T> ErrorResponse<T> error(String status, String message) {
+        return new ErrorResponse<>(status, message, null);
     }
 }

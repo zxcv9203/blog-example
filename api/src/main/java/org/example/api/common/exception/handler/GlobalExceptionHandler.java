@@ -2,7 +2,7 @@ package org.example.api.common.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.api.common.exception.model.ErrorResponse;
-import org.example.core.domain.post.exception.PostNotFoundException;
+import org.example.core.common.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -32,10 +32,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-    @ExceptionHandler(PostNotFoundException.class)
-    public ResponseEntity<ErrorResponse<Void>> handlePostNotFoundException(PostNotFoundException e) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse<Void>> handleBusinessException(BusinessException e) {
         ErrorResponse<Void> errorResponse = ErrorResponse.error(
-                HttpStatus.NOT_FOUND,
+                e.getStatusCode(),
                 e.getMessage()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
