@@ -1,6 +1,14 @@
 package org.example.core.common.exception;
 
+import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Getter
 public abstract class BusinessException extends RuntimeException {
+    private final Map<String, String> validation = new HashMap<>();
+
     protected BusinessException(String message) {
         super(message);
     }
@@ -10,4 +18,8 @@ public abstract class BusinessException extends RuntimeException {
     }
 
     public abstract String getStatusCode();
+
+    public void addValidation(String field, String message) {
+        validation.put(field, message);
+    }
 }

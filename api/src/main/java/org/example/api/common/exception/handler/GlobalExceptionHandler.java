@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
         ErrorResponse<Map<String, String>> errorResponse = ErrorResponse.error(
-                HttpStatus.BAD_REQUEST,
+                String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 "잘못된 요청입니다.",
                 errors
         );
@@ -33,10 +33,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse<Void>> handleBusinessException(BusinessException e) {
-        ErrorResponse<Void> errorResponse = ErrorResponse.error(
+    public ResponseEntity<ErrorResponse<Map<String, String>>> handleBusinessException(BusinessException e) {
+        ErrorResponse<Map<String, String>> errorResponse = ErrorResponse.error(
                 e.getStatusCode(),
-                e.getMessage()
+                e.getMessage(),
+                e.getValidation()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
