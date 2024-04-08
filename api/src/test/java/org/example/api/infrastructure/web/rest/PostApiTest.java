@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "example.org", uriPort = 443)
 class PostApiTest {
 
     @Autowired
@@ -42,6 +48,7 @@ class PostApiTest {
     void tearDown() {
         postRepository.deleteAll();
     }
+
     @Nested
     @DisplayName("게시글 생성")
     class Create {
@@ -56,7 +63,15 @@ class PostApiTest {
                             .content(objectMapper.writeValueAsString(request))
                     )
                     .andExpect(status().isCreated())
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-create",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestFields(
+                                    fieldWithPath("title").description("게시글 제목"),
+                                    fieldWithPath("content").description("게시글 내용")
+                            )
+                    ));
         }
 
         @Test

@@ -2,3 +2,16 @@
 
 = 블로그 API
 
+== 게시글 생성
+=== POST /api/posts
+
+==== curl
+include::{snippets}/post-create/curl-request.adoc[]
+
+==== HTTP 요청
+include::{snippets}/post-create/http-request.adoc[]
+include::{snippets}/post-create/request-body.adoc[]
+include::{snippets}/post-create/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/post-create/http-response.adoc[]
