@@ -24,8 +24,7 @@ import java.util.stream.IntStream;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,7 +87,20 @@ class PostApiTest {
                     .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value() + ""))
                     .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                     .andExpect(jsonPath("$.data.title").value("title 값은 필수값입니다."))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-create/fail/required-title",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestFields(
+                                    fieldWithPath("title").description("게시글 제목"),
+                                    fieldWithPath("content").description("게시글 내용")
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("에러 메시지"),
+                                    fieldWithPath("data.title").description("내용")
+                            )
+                    ));
         }
     }
 

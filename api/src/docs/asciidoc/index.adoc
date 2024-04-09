@@ -13,5 +13,9 @@ include::{snippets}/post-create/http-request.adoc[]
 include::{snippets}/post-create/request-body.adoc[]
 include::{snippets}/post-create/request-fields.adoc[]
 
-==== HTTP 응답
+==== 응답 성공 (200)
 include::{snippets}/post-create/http-response.adoc[]
+
+==== 응답 실패 (400) : 타이틀 미입력
+include::{snippets}/post-create/fail/required-title/http-response.adoc[]
+include::{snippets}/post-create/fail/required-title/response-fields.adoc[]
