@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -25,6 +26,7 @@ import java.util.stream.IntStream;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,7 +80,7 @@ class PostApiTest {
         void test2() throws Exception {
             PostCreate request = PostRequestStub.getNoTitlePostCreate();
 
-            mockMvc.perform(MockMvcRequestBuilders.post("/posts")
+            mockMvc.perform(RestDocumentationRequestBuilders.post("/posts")
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))
@@ -119,22 +121,48 @@ class PostApiTest {
                     .build();
             postRepository.save(post);
 
-            mockMvc.perform(MockMvcRequestBuilders.get(path, post.getId()))
+            mockMvc.perform(RestDocumentationRequestBuilders.get(path, post.getId()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(post.getId() + ""))
                     .andExpect(jsonPath("$.title").value(post.getTitle()))
                     .andExpect(jsonPath("$.content").value(post.getContent()))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-get",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("id").description("게시글 ID"),
+                                    fieldWithPath("title").description("게시글 제목"),
+                                    fieldWithPath("content").description("게시글 내용")
+                            )
+                    ));
+
         }
 
         @Test
         @DisplayName("[실패] 존재하지 않는 게시글 조회")
         void notFoundTest() throws Exception {
-            mockMvc.perform(MockMvcRequestBuilders.get(path, 0))
+            mockMvc.perform(RestDocumentationRequestBuilders.get(path, 0))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
                     .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-get/fail/not-found",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("에러 메시지"),
+                                    fieldWithPath("data").description("내용")
+                            )
+                    ));
+
         }
     }
 
@@ -153,10 +181,23 @@ class PostApiTest {
                     .toList();
             postRepository.saveAll(requestPosts);
 
-            mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=1"))
+            mockMvc.perform(RestDocumentationRequestBuilders.get("/posts?page=1"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.length()").value(want))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-get-list",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            queryParameters(
+                                    parameterWithName("page").description("페이지 번호")
+                            ),
+                            responseFields(
+                                    fieldWithPath("[].id").description("게시글 ID"),
+                                    fieldWithPath("[].title").description("게시글 제목"),
+                                    fieldWithPath("[].content").description("게시글 내용")
+                            )
+                    ));
+
         }
 
         @Test
@@ -192,13 +233,24 @@ class PostApiTest {
 
             PostCreate request = PostRequestStub.getPostCreate();
 
-            mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{id}", post.getId())
+            mockMvc.perform(RestDocumentationRequestBuilders.patch("/posts/{id}", post.getId())
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))
                     )
                     .andExpect(status().isOk())
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-edit",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            ),
+                            requestFields(
+                                    fieldWithPath("title").description("게시글 제목"),
+                                    fieldWithPath("content").description("게시글 내용")
+                            )
+                    ));
         }
 
         @Test
@@ -206,7 +258,7 @@ class PostApiTest {
         void notFoundTest() throws Exception {
             PostCreate request = PostRequestStub.getPostCreate();
 
-            mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{id}", 0)
+            mockMvc.perform(RestDocumentationRequestBuilders.patch("/posts/{id}", 0)
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))
@@ -214,7 +266,19 @@ class PostApiTest {
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
                     .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-edit/fail/not-found",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("에러 메시지"),
+                                    fieldWithPath("data").description("내용")
+                            )
+                    ));
         }
     }
 
@@ -230,19 +294,38 @@ class PostApiTest {
                     .build();
             postRepository.save(post);
 
-            mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{id}", post.getId()))
+            mockMvc.perform(RestDocumentationRequestBuilders.delete("/posts/{id}", post.getId()))
                     .andExpect(status().isOk())
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-delete",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            )
+                    ));
         }
 
         @Test
         @DisplayName("[실패] 존재하지 않는 게시글 삭제")
         void notFoundTest() throws Exception {
-            mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{id}", 0))
+            mockMvc.perform(RestDocumentationRequestBuilders.delete("/posts/{id}", 0))
                     .andExpect(status().isNotFound())
                     .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value() + ""))
                     .andExpect(jsonPath("$.message").value("게시글을 찾을 수 없습니다."))
-                    .andDo(print());
+                    .andDo(print())
+                    .andDo(document("post-delete/fail/not-found",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            pathParameters(
+                                    parameterWithName("id").description("게시글 ID")
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("HTTP 상태 코드"),
+                                    fieldWithPath("message").description("에러 메시지"),
+                                    fieldWithPath("data").description("내용")
+                            )
+                    ));
         }
     }
 }
