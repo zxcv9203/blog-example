@@ -247,8 +247,8 @@ class PostApiTest {
                                     parameterWithName("id").description("게시글 ID")
                             ),
                             requestFields(
-                                    fieldWithPath("title").description("게시글 제목").optional(),
-                                    fieldWithPath("content").description("게시글 내용").optional()
+                                    fieldWithPath("title").description("게시글 제목"),
+                                    fieldWithPath("content").description("게시글 내용")
                             )
                     ));
         }
