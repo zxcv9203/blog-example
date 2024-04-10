@@ -1,4 +1,9 @@
-:toc:
+:toc: left
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toclevels: 2
+:sectlinks:
 
 = 블로그 API
 
