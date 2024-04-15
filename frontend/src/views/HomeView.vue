@@ -3,7 +3,6 @@ import axios from "axios";
 import {ref} from "vue";
 
 const posts = ref([]);
-
 axios.get("/api/posts").then((response) => {
   posts.value = response.data;
 });
@@ -13,8 +12,12 @@ axios.get("/api/posts").then((response) => {
 <template>
   <ul>
     <li v-for="post in posts" :key="post.id">
-      <div>{{post.title}}</div>
-      <div>{{post.content}}</div>
+      <div>
+        <router-link :to="{name: 'read', params: {postId: post.id}}">
+          {{ post.title }}
+        </router-link>
+      </div>
+      <div>{{ post.content }}</div>
     </li>
   </ul>
 </template>
