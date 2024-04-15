@@ -1,7 +1,30 @@
 <script setup lang="js">
+import axios from "axios";
+import {ref} from "vue";
+
+const posts = ref([]);
+
+axios.get("/api/posts").then((response) => {
+  posts.value = response.data;
+});
+
 </script>
 
 <template>
-  <main>
-  </main>
+  <ul>
+    <li v-for="post in posts" :key="post.id">
+      <div>{{post.title}}</div>
+      <div>{{post.content}}</div>
+    </li>
+  </ul>
 </template>
+
+<style scoped>
+li {
+  margin-bottom: 1rem;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+</style>
