@@ -6,6 +6,7 @@ import router from './router/index.js'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import "bootstrap/dist/css/bootstrap-utilities.css"
+import "normalize.css"
 
 createApp(App)
     .use(router)
