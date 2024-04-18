@@ -7,6 +7,7 @@ import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
 import org.example.common.post.response.PostResponse;
 import org.example.core.application.PostService;
+import org.example.core.common.exception.InsufficientPermissionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,13 @@ public class PostApi {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<Void> post(@RequestBody @Valid PostCreate request) {
+    public ResponseEntity<Void> post(
+            @RequestBody @Valid PostCreate request,
+            @RequestHeader(required = false) String authorization
+    ) {
+        if (!"admin".equals(authorization)) {
+            throw new InsufficientPermissionException("권한이 부족합니다.");
+        }
         postService.write(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
