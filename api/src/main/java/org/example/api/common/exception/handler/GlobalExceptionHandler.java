@@ -39,6 +39,8 @@ public class GlobalExceptionHandler {
                 e.getMessage(),
                 e.getValidation()
         );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+
+        return ResponseEntity.status(HttpStatus.valueOf(Integer.parseInt(e.getStatusCode())))
+                .body(errorResponse);
     }
 }
