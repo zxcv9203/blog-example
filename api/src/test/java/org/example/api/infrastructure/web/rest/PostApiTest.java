@@ -59,7 +59,6 @@ class PostApiTest {
             PostCreate request = PostRequestStub.getPostCreate();
 
             mockMvc.perform(MockMvcRequestBuilders.post("/posts")
-                            .header("Authorization", "admin")
                             .characterEncoding(StandardCharsets.UTF_8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request))

@@ -20,14 +20,15 @@ public class PostApi {
 
     private final PostService postService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "hello";
+    }
+
     @PostMapping("/posts")
     public ResponseEntity<Void> post(
-            @RequestBody @Valid PostCreate request,
-            @RequestHeader(required = false) String authorization
+            @RequestBody @Valid PostCreate request
     ) {
-        if (!"admin".equals(authorization)) {
-            throw new InsufficientPermissionException("권한이 부족합니다.");
-        }
         postService.write(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
