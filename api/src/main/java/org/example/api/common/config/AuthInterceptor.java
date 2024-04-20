@@ -16,6 +16,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String accessToken = request.getParameter("accessToken");
         if ("admin".equals(accessToken)) {
+            request.setAttribute("username", accessToken);
             return true;
         }
 

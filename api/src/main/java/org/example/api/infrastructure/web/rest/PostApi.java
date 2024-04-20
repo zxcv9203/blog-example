@@ -2,6 +2,7 @@ package org.example.api.infrastructure.web.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.api.common.config.model.UserSession;
 import org.example.common.post.request.PostCreate;
 import org.example.common.post.request.PostEdit;
 import org.example.common.post.request.PostSearch;
@@ -21,8 +22,16 @@ public class PostApi {
     private final PostService postService;
 
     @GetMapping("/test")
-    public String test() {
+    public String test(
+            UserSession session
+    ) {
+        System.out.println(session.name());
         return "hello";
+    }
+
+    @GetMapping("foo")
+    public String bar() {
+        return "인증이 필요없는 페이지";
     }
 
     @PostMapping("/posts")
