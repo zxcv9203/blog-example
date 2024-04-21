@@ -16,11 +16,13 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String accessToken = webRequest.getParameter("accessToken");
-        if (!"admin".equals(accessToken)) {
+        String accessToken = webRequest.getHeader("Authorization");
+        if (!"".equals(accessToken)) {
             throw new UnauthorizedException("인증되지 않은 사용자입니다.");
         }
 
-        return new UserSession(accessToken);
+        // TODO 데이터베이스 사용자 확인 작업
+
+        return new UserSession(1L);
     }
 }

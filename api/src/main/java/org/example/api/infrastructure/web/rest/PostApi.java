@@ -25,8 +25,7 @@ public class PostApi {
     public String test(
             UserSession session
     ) {
-        System.out.println(session.name());
-        return "hello";
+        return String.valueOf(session.id());
     }
 
     @GetMapping("foo")
