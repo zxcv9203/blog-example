@@ -1,11 +1,9 @@
-package org.example.core.infrastructure.persistence;
+package org.example.core.infrastructure.persistence.post;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostSearch;
 import org.example.core.domain.post.Post;
 import org.example.core.domain.post.PostRepository;
-import org.example.core.infrastructure.persistence.JpaPostRepository;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

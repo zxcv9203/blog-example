@@ -1,4 +1,4 @@
-package org.example.core.application;
+package org.example.core.application.post;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.post.request.PostCreate;

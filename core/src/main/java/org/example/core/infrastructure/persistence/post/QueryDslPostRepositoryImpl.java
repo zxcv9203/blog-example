@@ -1,4 +1,4 @@
-package org.example.core.infrastructure.persistence;
+package org.example.core.infrastructure.persistence.post;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

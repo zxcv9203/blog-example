@@ -1,4 +1,4 @@
-package org.example.core.infrastructure.persistence;
+package org.example.core.infrastructure.persistence.post;
 
 import org.example.common.post.request.PostSearch;
 import org.example.core.domain.post.Post;
