@@ -1,4 +1,4 @@
-package org.example.core.application.member;
+package org.example.core.application.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.example.common.auth.request.LoginRequest;
@@ -11,12 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberService {
+public class AuthService {
 
     private final MemberRepository memberRepository;
 
-    public Member login(LoginRequest request) {
-        return memberRepository.findByEmailAndPassword(request.email(), request.password())
+    public void login(LoginRequest request) {
+        Member member = memberRepository.findByEmailAndPassword(request.email(), request.password())
                 .orElseThrow(InvalidSigninException::new);
+
+        member.addSession();
     }
 }
