@@ -9,12 +9,17 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepository {
+class MemberRepositoryImpl implements MemberRepository {
 
     private final JpaMemberRepository memberRepository;
 
     @Override
     public Optional<Member> findByEmailAndPassword(String email, String password) {
         return memberRepository.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public void deleteAll() {
+        memberRepository.deleteAll();
     }
 }
