@@ -11,6 +11,6 @@ public class InvalidSigninException extends BusinessException {
 
     @Override
     public String getStatusCode() {
-        return "404";
+        return "400";
     }
 }
