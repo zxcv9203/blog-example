@@ -1,7 +1,10 @@
 package org.example.common.auth.request;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+
+@Builder
 public record LoginRequest(
         @NotBlank(message = "이메일을 입력해주세요")
         String email,
