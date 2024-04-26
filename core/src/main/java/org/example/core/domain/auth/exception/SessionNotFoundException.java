@@ -11,6 +11,6 @@ public class SessionNotFoundException extends BusinessException {
 
     @Override
     public String getStatusCode() {
-        return "404";
+        return "401";
     }
 }
