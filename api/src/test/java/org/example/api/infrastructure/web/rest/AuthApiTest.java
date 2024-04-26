@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,7 +51,26 @@ class AuthApiTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.accessToken").exists());
         }
+
+        @Test
+        @DisplayName("[성공] 로그인후 권한이 필요한 페이지 접속 성공")
+        void loginAndAccessTest() throws Exception {
+
+            mockMvc.perform(get("/test")
+                            .header("Authorization", "6392da07-d89c-4c26-936a-53590471bdbe"))
+                    .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("[실패] 로그인시 검증되지 않은 세션 값인 경우 예외 발생")
+        void loginAndAccessFailTest() throws Exception {
+
+            mockMvc.perform(get("/test")
+                            .header("Authorization", "invalid"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
+
 
 }
 
