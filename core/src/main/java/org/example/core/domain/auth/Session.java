@@ -12,7 +12,6 @@ import java.util.UUID;
 @Table(name = "session")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @Getter
 public class Session {
 
