@@ -21,4 +21,10 @@ public class SessionRepositoryImpl implements SessionRepository {
         return jpaSessionRepository.findById(id)
                 .orElseThrow(SessionNotFoundException::new);
     }
+
+    @Override
+    public Session findByAccessToken(String accessToken) {
+        return jpaSessionRepository.findByAccessToken(accessToken)
+                .orElseThrow(SessionNotFoundException::new);
+    }
 }
