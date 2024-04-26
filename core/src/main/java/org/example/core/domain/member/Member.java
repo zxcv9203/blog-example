@@ -40,9 +40,12 @@ public class Member {
     @Comment("생성 시간")
     private LocalDateTime createdAt;
 
-    public void addSession() {
-        sessions.add(Session.builder()
+    public Session addSession() {
+        Session session = Session.builder()
                 .member(this)
-                .build());
+                .build();
+        sessions.add(session);
+
+        return session;
     }
 }
