@@ -1,6 +1,7 @@
 package org.example.api.infrastructure.web.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import org.example.common.auth.request.LoginRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -57,7 +58,7 @@ class AuthApiTest {
         void loginAndAccessTest() throws Exception {
 
             mockMvc.perform(get("/test")
-                            .header("Authorization", "6392da07-d89c-4c26-936a-53590471bdbe"))
+                            .cookie(new Cookie("SESSION", "6392da07-d89c-4c26-936a-53590471bdbe")))
                     .andExpect(status().isOk());
         }
 
@@ -66,7 +67,7 @@ class AuthApiTest {
         void loginAndAccessFailTest() throws Exception {
 
             mockMvc.perform(get("/test")
-                            .header("Authorization", "invalid"))
+                            .cookie(new Cookie("SESSION", "invalid")))
                     .andExpect(status().isUnauthorized());
         }
     }
