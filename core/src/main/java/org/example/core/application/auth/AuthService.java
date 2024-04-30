@@ -17,12 +17,10 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
 
-    public SessionResponse login(LoginRequest request) {
+    public Long login(LoginRequest request) {
         Member member = memberRepository.findByEmailAndPassword(request.email(), request.password())
                 .orElseThrow(InvalidSigninException::new);
 
-        Session session = member.addSession();
-
-        return new SessionResponse(session.getAccessToken());
+        return member.getId();
     }
 }
