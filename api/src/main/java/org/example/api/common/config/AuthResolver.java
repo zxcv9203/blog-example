@@ -23,6 +23,8 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class AuthResolver implements HandlerMethodArgumentResolver {
 
+    private final AppConfig appConfig;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return UserSession.class.equals(parameter.getParameterType());
@@ -34,7 +36,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         if ("".equals(accessToken)) {
             throw new UnauthorizedException("인증되지 않은 사용자입니다.");
         }
-        byte[] keyBytes = Decoders.BASE64.decode(AppConfig.SECRET_KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(appConfig.getSecretKey());
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         try {

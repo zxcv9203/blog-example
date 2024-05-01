@@ -1,6 +1,15 @@
 package org.example.api.common.config;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConfigurationProperties(prefix = "jwt")
+@Setter
+@Getter
 public class AppConfig {
 
-    public static final String SECRET_KEY = "c3VwZXJsb25nc3RyaW5nc2VjcmV0a2V5LS0tLWFzZGFzZGFz";
+    private String secretKey;
 }
