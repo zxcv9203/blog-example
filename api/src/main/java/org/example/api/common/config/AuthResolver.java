@@ -34,7 +34,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         if ("".equals(accessToken)) {
             throw new UnauthorizedException("인증되지 않은 사용자입니다.");
         }
-        byte[] keyBytes = Decoders.BASE64.decode("c3VwZXJsb25nc3RyaW5nc2VjcmV0a2V5LS0tLWFzZGFzZGFz");
+        byte[] keyBytes = Decoders.BASE64.decode(AppConfig.SECRET_KEY);
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         try {
