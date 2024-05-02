@@ -28,12 +28,10 @@ public class AuthApi {
     ) {
         Long userId = authService.login(request);
 
-        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
-        SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         String jws = Jwts.builder()
                 .subject(String.valueOf(userId))
-                .signWith(secretKey)
+                .signWith(jwtConfig.getSecretKey())
                 .compact();
 
         return ResponseEntity.status(HttpStatus.OK)

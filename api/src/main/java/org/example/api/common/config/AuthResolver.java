@@ -35,12 +35,10 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         if ("".equals(accessToken)) {
             throw new UnauthorizedException("인증되지 않은 사용자입니다.");
         }
-        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
-        SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .verifyWith(secretKey)
+                    .verifyWith(jwtConfig.getSecretKey())
                     .build()
                     .parseSignedClaims(accessToken);
             return new UserSession(Long.parseLong(claims.getPayload().getSubject()));
