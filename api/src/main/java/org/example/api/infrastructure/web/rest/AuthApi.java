@@ -4,7 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.example.api.common.config.AppConfig;
+import org.example.api.common.config.JwtConfig;
 import org.example.common.auth.request.LoginRequest;
 import org.example.common.auth.response.SessionResponse;
 import org.example.core.application.auth.AuthService;
@@ -21,14 +21,14 @@ import javax.crypto.SecretKey;
 public class AuthApi {
 
     private final AuthService authService;
-    private final AppConfig appConfig;
+    private final JwtConfig jwtConfig;
     @PostMapping("/auth/login")
     public ResponseEntity<SessionResponse> login(
             @RequestBody LoginRequest request
     ) {
         Long userId = authService.login(request);
 
-        byte[] keyBytes = Decoders.BASE64.decode(appConfig.getSecretKey());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         String jws = Jwts.builder()

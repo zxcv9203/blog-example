@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.api.common.config.model.UserSession;
 import org.example.core.common.exception.UnauthorizedException;
-import org.example.core.domain.auth.SessionRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -23,7 +22,7 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class AuthResolver implements HandlerMethodArgumentResolver {
 
-    private final AppConfig appConfig;
+    private final JwtConfig jwtConfig;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -36,7 +35,7 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         if ("".equals(accessToken)) {
             throw new UnauthorizedException("인증되지 않은 사용자입니다.");
         }
-        byte[] keyBytes = Decoders.BASE64.decode(appConfig.getSecretKey());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
 
         try {
