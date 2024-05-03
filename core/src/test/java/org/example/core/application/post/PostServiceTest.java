@@ -1,4 +1,4 @@
-package org.example.core.application;
+package org.example.core.application.post;
 
 import org.example.common.post.request.PostCreate;
 import org.example.common.post.request.PostEdit;
