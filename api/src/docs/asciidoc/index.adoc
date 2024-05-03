@@ -93,3 +93,20 @@ include::{snippets}/post-delete/http-response.adoc[]
 ==== 응답 실패 (404)
 include::{snippets}/post-delete/fail/not-found/http-response.adoc[]
 include::{snippets}/post-delete/fail/not-found/response-fields.adoc[]
+
+== 회원 가입
+
+=== POST /api/auth/signup
+
+==== curl
+include::{snippets}/signup/success/curl-request.adoc[]
+
+==== HTTP 요청
+include::{snippets}/signup/success/http-request.adoc[]
+include::{snippets}/signup/success/request-fields.adoc[]
+
+==== 응답 성공 (200)
+include::{snippets}/signup/success/http-response.adoc[]
+
+==== 응답 실패 (400) : 이메일 중복
+include::{snippets}/signup/fail/duplicate-email/http-response.adoc[]

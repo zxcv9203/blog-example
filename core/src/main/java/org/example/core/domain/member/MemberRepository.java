@@ -8,4 +8,10 @@ public interface MemberRepository {
 
     Member findById(Long id);
     void deleteAll();
+
+    Member save(Member member);
+
+    long count();
+
+    void checkByEmail(String email);
 }

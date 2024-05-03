@@ -3,6 +3,7 @@ package org.example.core.infrastructure.persistence.member;
 import lombok.RequiredArgsConstructor;
 import org.example.core.domain.member.Member;
 import org.example.core.domain.member.MemberRepository;
+import org.example.core.domain.member.exception.DuplicateEmailException;
 import org.example.core.domain.member.exception.MemberNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-class MemberRepositoryImpl implements MemberRepository {
+public class MemberRepositoryImpl implements MemberRepository {
 
     private final JpaMemberRepository memberRepository;
 
@@ -28,5 +29,22 @@ class MemberRepositoryImpl implements MemberRepository {
     @Override
     public void deleteAll() {
         memberRepository.deleteAll();
+    }
+
+    @Override
+    public Member save(Member member) {
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public long count() {
+        return memberRepository.count();
+    }
+
+    @Override
+    public void checkByEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new DuplicateEmailException();
+        }
     }
 }

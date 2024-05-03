@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.example.api.common.config.JwtConfig;
 import org.example.common.auth.request.LoginRequest;
+import org.example.common.auth.request.SignupRequest;
 import org.example.common.auth.response.SessionResponse;
 import org.example.core.application.auth.AuthService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,16 @@ public class AuthApi {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new SessionResponse(jws));
+    }
+
+    @PostMapping("/auth/signup")
+    public ResponseEntity<Void> signup(
+            @RequestBody SignupRequest request
+    ) {
+        authService.signup(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .build();
     }
 }
 

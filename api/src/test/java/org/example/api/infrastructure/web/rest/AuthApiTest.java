@@ -3,6 +3,7 @@ package org.example.api.infrastructure.web.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.example.common.auth.request.LoginRequest;
+import org.example.common.auth.request.SignupRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,6 +73,65 @@ class AuthApiTest {
             mockMvc.perform(get("/test")
                             .cookie(new Cookie("SESSION", "invalid")))
                     .andExpect(status().isUnauthorized());
+        }
+    }
+
+    @Nested
+    @DisplayName("회원가입")
+    class Signup {
+        private static final String path = "/auth/signup";
+
+        @Test
+        @DisplayName("[성공] 회원가입 성공")
+        void successTest() throws Exception {
+            SignupRequest signupRequest = SignupRequest.builder()
+                    .name("name")
+                    .email("email@example.com")
+                    .password("password")
+                    .build();
+
+            mockMvc.perform(post(path)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(signupRequest)))
+                    .andExpect(status().isCreated())
+                    .andDo(document("signup/success",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestFields(
+                                    fieldWithPath("name").description("이름"),
+                                    fieldWithPath("email").description("이메일"),
+                                    fieldWithPath("password").description("비밀번호")
+                            )
+                    ));
+        }
+
+        @Test
+        @DisplayName("[실패] 이메일 중복")
+        void duplicateEmailTest() throws Exception {
+            SignupRequest signupRequest = SignupRequest.builder()
+                    .name("name")
+                    .email("admin@example.com")
+                    .password("password")
+                    .build();
+
+            mockMvc.perform(post(path)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(signupRequest)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(document("signup/fail/duplicate-email",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint()),
+                            requestFields(
+                                    fieldWithPath("name").description("이름"),
+                                    fieldWithPath("email").description("이메일"),
+                                    fieldWithPath("password").description("비밀번호")
+                            ),
+                            responseFields(
+                                    fieldWithPath("code").description("상태 코드"),
+                                    fieldWithPath("message").description("에러 메시지"),
+                                    fieldWithPath("data").description("데이터")
+                            )
+                    ));
         }
     }
 
