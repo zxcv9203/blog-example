@@ -6,6 +6,7 @@ import org.example.common.auth.request.SignupRequest;
 import org.example.core.domain.member.Member;
 import org.example.core.domain.member.MemberRepository;
 import org.example.core.domain.member.exception.InvalidSigninException;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,13 @@ public class AuthService {
     public void signup(SignupRequest request) {
         memberRepository.checkByEmail(request.email());
 
+        SCryptPasswordEncoder passwordEncoder = new SCryptPasswordEncoder(16, 8, 1, 32, 64);
+        String encodedPassword = passwordEncoder.encode(request.password());
+
         Member member = Member.builder()
                 .name(request.name())
                 .email(request.email())
-                .password(request.password())
+                .password(encodedPassword)
                 .createdAt(LocalDateTime.now())
                 .build();
 
