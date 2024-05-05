@@ -47,4 +47,10 @@ public class MemberRepositoryImpl implements MemberRepository {
             throw new DuplicateEmailException();
         }
     }
+
+    @Override
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+    }
 }

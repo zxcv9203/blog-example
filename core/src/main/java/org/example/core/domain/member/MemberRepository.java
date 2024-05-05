@@ -14,4 +14,6 @@ public interface MemberRepository {
     long count();
 
     void checkByEmail(String email);
+
+    Member findByEmail(String email);
 }
