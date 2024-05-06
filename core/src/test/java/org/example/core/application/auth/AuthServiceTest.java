@@ -5,6 +5,8 @@ import org.example.common.auth.request.SignupRequest;
 import org.example.core.common.config.JpaConfig;
 import org.example.core.common.config.QueryDslConfig;
 import org.example.core.common.security.PasswordEncoder;
+import org.example.core.common.security.PlainPasswordEncoder;
+import org.example.core.common.security.ScryptPasswordEncoder;
 import org.example.core.domain.member.Member;
 import org.example.core.domain.member.MemberRepository;
 import org.example.core.domain.member.exception.DuplicateEmailException;
@@ -18,15 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-@SpringBootTest(classes = {AuthService.class, MemberRepositoryImpl.class, PasswordEncoder.class})
+@SpringBootTest(classes = {AuthService.class, MemberRepositoryImpl.class, PlainPasswordEncoder.class})
 @EnableAutoConfiguration
 @Import({JpaConfig.class, QueryDslConfig.class})
+@ActiveProfiles("test")
 class AuthServiceTest {
 
     @Autowired

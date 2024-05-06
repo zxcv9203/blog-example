@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.common.auth.request.LoginRequest;
 import org.example.common.auth.request.SignupRequest;
 import org.example.core.common.security.PasswordEncoder;
+import org.example.core.common.security.ScryptPasswordEncoder;
 import org.example.core.domain.member.Member;
 import org.example.core.domain.member.MemberRepository;
 import org.example.core.domain.member.exception.InvalidSigninException;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder scryptPasswordEncoder;
     public Long login(LoginRequest request) {
         Member member = memberRepository.findByEmail(request.email());
 
-        if (!passwordEncoder.matches(request.password(), member.getPassword())) {
+        if (!scryptPasswordEncoder.matches(request.password(), member.getPassword())) {
             throw new InvalidSigninException();
         }
 
@@ -33,7 +33,7 @@ public class AuthService {
     public void signup(SignupRequest request) {
         memberRepository.checkByEmail(request.email());
 
-        String encodedPassword = passwordEncoder.encrypt(request.password());
+        String encodedPassword = scryptPasswordEncoder.encrypt(request.password());
 
         Member member = Member.builder()
                 .name(request.name())
