@@ -38,6 +38,11 @@ public class SecurityConfig {
                 .permitAll()
         );
 
+        http.rememberMe(rememberMe -> rememberMe
+                .alwaysRemember(false)
+                .tokenValiditySeconds(2592000) // 30일
+        );
+
         http.userDetailsService(userDetailsService());
 
         return http.build();
